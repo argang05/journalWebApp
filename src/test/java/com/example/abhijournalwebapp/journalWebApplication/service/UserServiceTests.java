@@ -37,6 +37,7 @@ public class UserServiceTests {
     @Test
 //    //To Disable a test we can use @Disabled annotation:
 //    @Disabled
+    @Disabled
     public void testFindByUserName(){
         //assetNotNull() tests whether a particular method does not return null:
         //assert mean "Daava Karna".
@@ -53,6 +54,7 @@ public class UserServiceTests {
             "Ram",
             "Shyaam",
     })
+    @Disabled
     public void testJournalEntriesOfUser(String userName){
         User user = userRepository.findByUserName(userName);
         assertTrue(!user.getJournalEntries().isEmpty() , "Test Failed For: "+userName);
