@@ -1,0 +1,51 @@
+<configuration>
+<!--    Here We'll Define Log Properties -->
+<!--    Appender Is Used To specify where we want to print the logs (eg: Log File or Console)-->
+    <appender name="myConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- Defining Encoder Or The Format In Which we Want to Display Logs -->
+        <encoder>
+            <pattern>
+                <!-- Pattern :
+                Date-Time _ Thread-Identifier _ Severity-Level-Of-Log(5 units width adjusted from left)
+                 _ Logger-Name-upto-36-chars _ Message-With-New-Line
+                -->
+                %d{yy-MM-dd HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    <appender name="myFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--Specifying File Name For Intra-Directory Creation /
+            File Path For Inter-Directory Creation Of Log File-->
+        <file>
+            journalApp.log
+        </file>
+
+        <!--Mentioning Rolling Policy : Meaning After Which Limit Of 'X' Parameter We Want A new
+        Log File To Be Created (Eg Size Limit Or Time Limit)-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!--fileNamePattern for rolling(create new) log files every minute and %i for index-->
+            <fileNamePattern>journalApp-%d{yy-MM-dd_HH-mm}.%i.log</fileNamePattern>
+            <maxFileSize>10MB</maxFileSize>
+            <!--maxHistory Specifies That If X number of Log Files Are Created Then Delete The
+            Oldest One-->
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+
+        <!-- Defining Encoder Or The Format In Which we Want to Display Logs -->
+        <encoder>
+            <pattern>
+                <!-- Pattern :
+                Date-Time _ Thread-Identifier _ Severity-Level-Of-Log _ Logger-Name _ Message-With-New-Line
+                -->
+                %d{yy-MM-dd HH:mm:ss:SSS} [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+
+    </appender>
+<!--    Specifying Where TO Use Appender Logs (eg: root) and LEVEL Of Severeness-->
+    <root level="INFO">
+        <!-- Passing Appender Reference For Console and File Appenders-->
+        <appender-ref ref="myConsoleAppender"/>
+        <appender-ref ref="myFileAppender"/>
+    </root>
+</configuration>
