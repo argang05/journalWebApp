@@ -1,8 +1,12 @@
 package com.example.abhijournalwebapp.journalWebApplication.controller;
 
+import com.example.abhijournalwebapp.journalWebApplication.api.response.QuotesResponse;
+import com.example.abhijournalwebapp.journalWebApplication.api.response.WeatherResponse;
 import com.example.abhijournalwebapp.journalWebApplication.entity.User;
 import com.example.abhijournalwebapp.journalWebApplication.repository.UserRepository;
+import com.example.abhijournalwebapp.journalWebApplication.service.QuotesService;
 import com.example.abhijournalwebapp.journalWebApplication.service.UserService;
+import com.example.abhijournalwebapp.journalWebApplication.service.WeatherService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +30,13 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    //Inject WeatherService and QuotesService:
+    @Autowired
+    private WeatherService weatherService;
+
+    @Autowired
+    private QuotesService quotesService;
 
     @GetMapping("/id/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable ObjectId userId){
@@ -70,5 +81,25 @@ public class UserController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("/greet-user")
+    public ResponseEntity<?> greeting(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+
+        WeatherResponse weatherResponse = weatherService.getWeatherDetails("Mumbai");
+
+        QuotesResponse quotesResponse = quotesService.getQuotes();
+
+        String greetingMessage = "Hi! "+userName;
+
+        if(weatherResponse != null && quotesResponse != null){
+            int feelsLikeTemp = weatherResponse.getCurrent().getFeelslike();
+            String quote = "'"+quotesResponse.getQuote()+"'";
+            greetingMessage += "\nWeather Feels Like: "+feelsLikeTemp+" deg.C"+
+                    "\nQuote For Today: "+quote;
+        }
+        return new ResponseEntity<>(greetingMessage,HttpStatus.OK);
     }
 }

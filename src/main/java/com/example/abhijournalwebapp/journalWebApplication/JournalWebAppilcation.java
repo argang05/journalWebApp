@@ -10,10 +10,18 @@ numbers assigned yet
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
 public class JournalWebAppilcation {
 	public static void main(String[] args) {
 		SpringApplication.run(JournalWebAppilcation.class, args);
+	}
+
+	//Creating an instance/implementation of RestTemplate To avoid errors:
+	@Bean
+	public RestTemplate restTemplate(){
+		return new RestTemplate();
 	}
 }
