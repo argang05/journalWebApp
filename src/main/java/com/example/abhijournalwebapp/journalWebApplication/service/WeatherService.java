@@ -2,6 +2,7 @@ package com.example.abhijournalwebapp.journalWebApplication.service;
 
 import com.example.abhijournalwebapp.journalWebApplication.api.response.WeatherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -13,7 +14,12 @@ import org.springframework.web.client.RestTemplate;
 //We can use @Service annotation instead of @Component for better readability
 @Service
 public class WeatherService {
-    private static final String API_KEY = "d5dd1ecbe869b5afa7b354f20d1bb84a";
+    //Importing the value of API_KEY from yml config file using @Value annotation
+    // To Avoid Exposing Sensitive API Keys:
+    //Variable Should not be Static or Final.
+    @Value("${weather.api.key}")
+    private String API_KEY;
+
     private static final String API_URL = "http://api.weatherstack.com/current?access_key=API_KEY&query=CITY";
 
     //To Hit A External API From Spring Boot Code We Will Use RestTemplate:
