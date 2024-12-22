@@ -11,9 +11,7 @@ entity and the journals associated to him/her.
 3.) "JournalEntries" List (Containing ObjectIds Of all associated journals).
  */
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -25,7 +23,9 @@ import java.util.List;
 
 @Document(collection = "users")
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
     //We use @Id annotation to map id to the _id of mongodb entity
     @Id
@@ -40,6 +40,13 @@ public class User {
     private String password;
 
     private List<String> roles;
+
+    //We're Going to Create a functionality such that the user who has a valid email and
+    // has opted for sentimentAnalysis will get a weekly report of his/her sentiments (happy or sad etc.)
+    // through email (automated process) which will be evaluated from there journals entries(of a week)
+    // using concept of NLP(Natural Language Processing)
+    private String email;
+    private boolean sentimentAnalysis;
 
     //Using @DBRef to establish relationship/reference to the JournalEntry Entity:
     //It will store a list of references of JournalEntry entities which will contain the ObjectIds.
