@@ -6,13 +6,17 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import org.springframework.http.HttpHeaders;
 
 import java.util.Objects;
 
-@Component
+//Make this a IOC Bean using @Component annotation:
+//@Component
+//We can use @Service annotation instead of @Component for better readability
+@Service
 public class QuotesService {
     private static final String API_KEY = "NZSmGkuATYkoEIq8TJpFLA==5TLxLIsXnePuh256";
     private static final String API_URL = "https://api.api-ninjas.com/v1/quotes?category=happiness";
@@ -34,6 +38,7 @@ public class QuotesService {
         //restTemplate.exchange(URL , REQUEST_METHOD , HEADERS , RESPONSE_TYPE)
         //Process Of Converting JSON Object into POJO (Plain Old Java Object) Is Called Deserialization.
         ResponseEntity<QuotesResponse[]> response = restTemplate.exchange(API_URL , HttpMethod.GET , requestEntity , QuotesResponse[].class);
+        //POST Request : restTemplate.exchange(URL , Http.POST , REQUEST_ENTITY/BODY Of Type HttpEntity<>() , RESPONSE_TYPE)
 
         QuotesResponse responseDataBody = Objects.requireNonNull(response.getBody())[0];
         return responseDataBody;

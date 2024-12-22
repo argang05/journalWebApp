@@ -13,12 +13,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
 
 //Make this a IOC Bean using @Component annotation:
-@Component
+//@Component
+//We can use @Service annotation instead of @Component for better readability
+@Service
 //We can avoid creating logger instances using @Slf4j annotation on Class:
 @Slf4j
 public class UserService {

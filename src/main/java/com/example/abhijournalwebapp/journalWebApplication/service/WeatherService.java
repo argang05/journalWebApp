@@ -5,9 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Component
+//Make this a IOC Bean using @Component annotation:
+//@Component
+//We can use @Service annotation instead of @Component for better readability
+@Service
 public class WeatherService {
     private static final String API_KEY = "d5dd1ecbe869b5afa7b354f20d1bb84a";
     private static final String API_URL = "http://api.weatherstack.com/current?access_key=API_KEY&query=CITY";
@@ -22,6 +26,7 @@ public class WeatherService {
         //restTemplate.exchange(URL , REQUEST_METHOD , HEADERS , RESPONSE_TYPE)
         //Process Of Converting JSON Object into POJO (Plain Old Java Object) Is Called Deserialization.
         ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalURL , HttpMethod.GET , null, WeatherResponse.class);
+        //POST Request : restTemplate.exchange(URL , Http.POST , REQUEST_ENTITY/BODY Of Type HttpEntity , RESPONSE_TYPE)
 
         //Get the response dataBody:
         WeatherResponse dataBody = response.getBody();

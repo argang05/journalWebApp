@@ -7,10 +7,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 //We're gonna implement the interface UserDetailsService in order to get access to its method loadUserByUsername
 
-@Component
+//Make this a IOC Bean using @Component annotation:
+//@Component
+//We can use @Service annotation instead of @Component for better readability
+@Service
 public class UserDetailsServiceImpl implements UserDetailsService {
     //We'll retrieve the user and build user credentials for authentication and authorisation:
 
