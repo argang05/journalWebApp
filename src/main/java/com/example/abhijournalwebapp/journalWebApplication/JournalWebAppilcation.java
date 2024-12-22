@@ -11,9 +11,12 @@ numbers assigned yet
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
+//Enable Scheduling Process In Spring Boot App:
+@EnableScheduling
 public class JournalWebAppilcation {
 	public static void main(String[] args) {
 		SpringApplication.run(JournalWebAppilcation.class, args);

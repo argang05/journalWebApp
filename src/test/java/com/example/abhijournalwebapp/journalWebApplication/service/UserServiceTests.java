@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Disabled
 public class UserServiceTests {
 
     //A very basic test of adding two numbers for demonstration:

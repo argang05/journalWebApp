@@ -43,8 +43,7 @@ public class User {
 
     //We're Going to Create a functionality such that the user who has a valid email and
     // has opted for sentimentAnalysis will get a weekly report of his/her sentiments (happy or sad etc.)
-    // through email (automated process) which will be evaluated from there journals entries(of a week)
-    // using concept of NLP(Natural Language Processing)
+    // through email (automated process) which will be evaluated from their journals entries(of a week)
     private String email;
     private boolean sentimentAnalysis;
 
