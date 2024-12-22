@@ -1,12 +1,13 @@
 package com.example.abhijournalwebapp.journalWebApplication.service;
 
 import com.example.abhijournalwebapp.journalWebApplication.api.response.QuotesResponse;
+import com.example.abhijournalwebapp.journalWebApplication.cache.AppCache;
+import com.example.abhijournalwebapp.journalWebApplication.constants.Placeholders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,7 +34,15 @@ public class QuotesService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public QuotesResponse getQuotes(){
+    //Injecting AppCache Instance to use the config key:value pairs for api url:
+    @Autowired
+    private AppCache appCache;
+
+    public QuotesResponse getQuotes(String category){
+        //taking URL From the appCache in memory cache to avoid exposing it in public;
+        String finalApiURL = appCache.appCacheMap.get(AppCache.keys.QUOTES_API_URL.toString())
+                .replace(Placeholders.CATEGORY , category);
+
         //Set the headers:
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Api-Key",API_KEY);
@@ -43,7 +52,7 @@ public class QuotesService {
 
         //restTemplate.exchange(URL , REQUEST_METHOD , HEADERS , RESPONSE_TYPE)
         //Process Of Converting JSON Object into POJO (Plain Old Java Object) Is Called Deserialization.
-        ResponseEntity<QuotesResponse[]> response = restTemplate.exchange(API_URL , HttpMethod.GET , requestEntity , QuotesResponse[].class);
+        ResponseEntity<QuotesResponse[]> response = restTemplate.exchange(finalApiURL , HttpMethod.GET , requestEntity , QuotesResponse[].class);
         //POST Request : restTemplate.exchange(URL , Http.POST , REQUEST_ENTITY/BODY Of Type HttpEntity<>() , RESPONSE_TYPE)
 
         QuotesResponse responseDataBody = Objects.requireNonNull(response.getBody())[0];

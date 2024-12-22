@@ -2,6 +2,7 @@ package com.example.abhijournalwebapp.journalWebApplication.controller;
 
 //Admin Controller For Defining API Calls For Admin Specific And Exclusive Tasks:
 
+import com.example.abhijournalwebapp.journalWebApplication.cache.AppCache;
 import com.example.abhijournalwebapp.journalWebApplication.entity.User;
 import com.example.abhijournalwebapp.journalWebApplication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AppCache appCache;
 
     @GetMapping("/all-users")
     public ResponseEntity<?> getAllUsers() {
@@ -38,4 +42,10 @@ public class AdminController {
         }
     }
 
+    //Adding and exposing an API Endpoint For Cleaning and Reinitialising appCache:
+    @GetMapping("/clear-app-cache")
+    public ResponseEntity<?> clearAppCache(){
+        appCache.init();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

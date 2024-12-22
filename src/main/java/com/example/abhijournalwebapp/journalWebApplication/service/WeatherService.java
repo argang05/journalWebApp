@@ -1,11 +1,12 @@
 package com.example.abhijournalwebapp.journalWebApplication.service;
 
 import com.example.abhijournalwebapp.journalWebApplication.api.response.WeatherResponse;
+import com.example.abhijournalwebapp.journalWebApplication.cache.AppCache;
+import com.example.abhijournalwebapp.journalWebApplication.constants.Placeholders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,16 +19,21 @@ public class WeatherService {
     // To Avoid Exposing Sensitive API Keys:
     //Variable Should not be Static or Final.
     @Value("${weather.api.key}")
-    private String API_KEY;
-
-    private static final String API_URL = "http://api.weatherstack.com/current?access_key=API_KEY&query=CITY";
+    private String apiKey;
 
     //To Hit A External API From Spring Boot Code We Will Use RestTemplate:
     @Autowired
     private RestTemplate restTemplate;
 
+    //Injecting AppCache Instance to use the config key:value pairs for api url:
+    @Autowired
+    private AppCache appCache;
+
     public WeatherResponse getWeatherDetails(String city){
-        String finalURL = API_URL.replace("CITY",city).replace("API_KEY",API_KEY);
+        //taking URL From the appCache in memory cache to avoid exposing it in public
+        String finalURL = appCache.appCacheMap.get(AppCache.keys.WEATHER_API_URL.toString())
+                .replace(Placeholders.CITY, city) //Instead Of Hardcoding Storing Placeholder mapping in separate interface
+                .replace(Placeholders.API_KEY, apiKey);
 
         //restTemplate.exchange(URL , REQUEST_METHOD , HEADERS , RESPONSE_TYPE)
         //Process Of Converting JSON Object into POJO (Plain Old Java Object) Is Called Deserialization.

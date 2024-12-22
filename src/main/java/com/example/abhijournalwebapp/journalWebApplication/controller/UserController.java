@@ -90,7 +90,7 @@ public class UserController {
 
         WeatherResponse weatherResponse = weatherService.getWeatherDetails("Mumbai");
 
-        QuotesResponse quotesResponse = quotesService.getQuotes();
+        QuotesResponse quotesResponse = quotesService.getQuotes("happiness");
 
         String greetingMessage = "Hi! "+userName;
 
