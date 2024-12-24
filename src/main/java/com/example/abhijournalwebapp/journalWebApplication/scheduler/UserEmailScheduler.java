@@ -4,9 +4,11 @@ import com.example.abhijournalwebapp.journalWebApplication.cache.AppCache;
 import com.example.abhijournalwebapp.journalWebApplication.entity.JournalEntry;
 import com.example.abhijournalwebapp.journalWebApplication.entity.User;
 import com.example.abhijournalwebapp.journalWebApplication.enums.Sentiment;
+import com.example.abhijournalwebapp.journalWebApplication.model.SentimentData;
 import com.example.abhijournalwebapp.journalWebApplication.repository.UserRepositoryImpl;
 import com.example.abhijournalwebapp.journalWebApplication.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +34,10 @@ public class UserEmailScheduler {
 
     @Autowired
     private AppCache appCache;
+
+    //Using Kafka in the scheduling task to make task faster smooth and more efficient:
+    @Autowired
+    private KafkaTemplate<String , SentimentData> kafkaTemplate;
 
     //We are going to Schedule this Entire Function:
 //    @Scheduled(cron = "0/30 * * ? * *")
@@ -78,11 +84,38 @@ public class UserEmailScheduler {
             }
             //Sending the most frequent sentiment of a user through email:
             if(mostFrequentSentiment != null){
-                emailService.sendEmail(
-                        user.getEmail(),
-                        "Sentiment Analysis Result Of Last 7 Days",
-                        "Most Frequent Sentiment: "+mostFrequentSentiment.toString()
-                );
+                //We'll give the email sending job to kafka to produce it to the consumers through kafka brokers
+                // or server for achieving distributed service functionality for fast, smooth and efficient
+                // task execution:
+
+                //Building SentimentData Instance:
+                SentimentData sentimentData = SentimentData.builder()
+                        .email(user.getEmail())
+                        .sentiment("Sentiment Analysis Result For Last 7 days: "+mostFrequentSentiment)
+                        .build();
+
+                try{
+                    //Using kafka to send email:
+                    //We are passing three things:
+                    // 1.) Topic Name We have Created To keep messages to be produced.
+                    // 2.) Email address of each sentiment data to be used as key in partition based ordering.
+                    // 3.) SentimentData object.
+                    //We'll also handle kafka fallback (due to plan expiry) by using it synchronously
+                    // using try catch:
+                    kafkaTemplate.send(
+                            "weekly-sentiments" ,
+                            sentimentData.getEmail() ,
+                            sentimentData
+                    );
+                }catch (Exception e){
+                    //Using the emailService to send email if kafka fallback occurs
+                    emailService.sendEmail(
+                            sentimentData.getEmail(),
+                            "Sentiment Analysis Result For Previous Week",
+                            sentimentData.getSentiment()
+                    );
+                }
+
             }
         }
     }
