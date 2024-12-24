@@ -4,6 +4,9 @@ package com.example.abhijournalwebapp.journalWebApplication.cache;
 //Application is a process of storing frequently used and frequently changing config
 // data in database and load that db inside your spring-boot application.
 
+//We'll be using Redis For In-Memory Caching instead of JVM bcz Redis provides multiple extra functionalities.
+
+
 import com.example.abhijournalwebapp.journalWebApplication.entity.ConfigJournalAppEntity;
 import com.example.abhijournalwebapp.journalWebApplication.repository.ConfigJournalAppRepository;
 import jakarta.annotation.PostConstruct;

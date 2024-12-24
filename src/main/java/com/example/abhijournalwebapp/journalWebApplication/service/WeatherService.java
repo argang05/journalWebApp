@@ -29,22 +29,39 @@ public class WeatherService {
     @Autowired
     private AppCache appCache;
 
+    //Using RedisService To Set and Get Values to and from In Memory Cache
+    @Autowired
+    private RedisService redisService;
+
     public WeatherResponse getWeatherDetails(String city){
-        //taking URL From the appCache in memory cache to avoid exposing it in public
-        String finalURL = appCache.appCacheMap.get(AppCache.keys.WEATHER_API_URL.toString())
-                .replace(Placeholders.CITY, city) //Instead Of Hardcoding Storing Placeholder mapping in separate interface
-                .replace(Placeholders.API_KEY, apiKey);
+        //Get the weatherResponse Data From In Redis InMemory Cache
+        WeatherResponse weatherResponse = redisService.get("weather_of_"+city, WeatherResponse.class);
+        if(weatherResponse != null){
+            //if data is present in cache then return it
+            return weatherResponse;
+        }else {
+            //Otherwise fetch from api and then set in redis IMC:
 
-        //restTemplate.exchange(URL , REQUEST_METHOD , HEADERS , RESPONSE_TYPE)
-        //Process Of Converting JSON Object into POJO (Plain Old Java Object) Is Called Deserialization.
-        ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalURL , HttpMethod.GET , null, WeatherResponse.class);
-        //POST Request : restTemplate.exchange(URL , Http.POST , REQUEST_ENTITY/BODY Of Type HttpEntity , RESPONSE_TYPE)
+            //taking URL From the appCache in memory cache to avoid exposing it in public
+            String finalURL = appCache.appCacheMap.get(AppCache.keys.WEATHER_API_URL.toString())
+                    .replace(Placeholders.CITY, city) //Instead Of Hardcoding Storing Placeholder mapping in separate interface
+                    .replace(Placeholders.API_KEY, apiKey);
 
-        //Get the response dataBody:
-        WeatherResponse dataBody = response.getBody();
+            //restTemplate.exchange(URL , REQUEST_METHOD , HEADERS , RESPONSE_TYPE)
+            //Process Of Converting JSON Object into POJO (Plain Old Java Object) Is Called Deserialization.
+            ResponseEntity<WeatherResponse> response = restTemplate.exchange(finalURL, HttpMethod.GET, null, WeatherResponse.class);
+            //POST Request : restTemplate.exchange(URL , Http.POST , REQUEST_ENTITY/BODY Of Type HttpEntity , RESPONSE_TYPE)
 
-        //Return body
-        return dataBody;
+            //Get the response dataBody:
+            WeatherResponse dataBody = response.getBody();
+
+            //Save the dataBody in Redis In-Memory Cache;
+            if(dataBody != null){
+                redisService.set("weather_of_"+city , dataBody , 300l); //300 seconds = 5 min
+            }
+            //Return body
+            return dataBody;
+        }
     }
 
 

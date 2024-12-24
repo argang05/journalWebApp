@@ -76,6 +76,7 @@ public class UserEmailScheduler {
                     mostFrequentSentiment = sentimentCountEntry.getKey();
                 }
             }
+            //Sending the most frequent sentiment of a user through email:
             if(mostFrequentSentiment != null){
                 emailService.sendEmail(
                         user.getEmail(),

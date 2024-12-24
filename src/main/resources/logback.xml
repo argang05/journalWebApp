@@ -24,7 +24,7 @@
         Log File To Be Created (Eg Size Limit Or Time Limit)-->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!--fileNamePattern for rolling(create new) log files every minute and %i for index-->
-            <fileNamePattern>journalApp-%d{yy-MM-dd_HH-mm}.%i.log</fileNamePattern>
+            <fileNamePattern>journalApp-%d{yy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
             <!--maxHistory Specifies That If X number of Log Files Are Created Then Delete The
             Oldest One-->
