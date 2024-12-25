@@ -7,6 +7,7 @@ import com.example.abhijournalwebapp.journalWebApplication.enums.Sentiment;
 import com.example.abhijournalwebapp.journalWebApplication.model.SentimentData;
 import com.example.abhijournalwebapp.journalWebApplication.repository.UserRepositoryImpl;
 import com.example.abhijournalwebapp.journalWebApplication.service.EmailService;
+import com.example.abhijournalwebapp.journalWebApplication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
