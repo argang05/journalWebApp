@@ -51,11 +51,11 @@ public class SpringSecurityDev {
                 // Authorizing requests based on their paths.
                 .authorizeHttpRequests(request -> request
                         // Allow anyone to access URLs starting with /public/** without logging in.
-                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/api/public/**","/api/").permitAll()
                         // Require users to log in for URLs starting with /journal/** or /user/**.
-                        .requestMatchers("/journal/**", "/user/**").authenticated()
+                        .requestMatchers("/api/journal/**", "/api/user/**").authenticated()
                         // Restrict URLs starting with /admin/** to users with the "ADMIN" role only.
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         // Any other request also requires authentication by default.
                         .anyRequest().permitAll())
                 // Disable CSRF protection (Cross-Site Request Forgery) for simplicity in this setup.

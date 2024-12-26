@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 //Now to access any endpoint urls within this controller, complete url will look like:
 // localhost:8080/journal/api_endpoint_name
 @RestController
-@RequestMapping("/journal")
+@RequestMapping("/api/journal")
 public class JournalEntryController {
     //Note: Make Sure All Methods Inside A Controller are public so that it can be accessed by all users!
 

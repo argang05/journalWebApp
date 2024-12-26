@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 //Now to access any endpoint urls within this controller, complete url will look like:
 // localhost:8080/journal/api_endpoint_name
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     @Autowired

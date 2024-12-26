@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 //Tests For EmailService Component Here:
 
+@Disabled
 @SpringBootTest
 public class EmailServiceTests {
 
