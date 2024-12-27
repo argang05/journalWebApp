@@ -4,6 +4,8 @@ import com.example.abhijournalwebapp.journalWebApplication.entity.JournalEntry;
 import com.example.abhijournalwebapp.journalWebApplication.entity.User;
 import com.example.abhijournalwebapp.journalWebApplication.service.JournalEntryService;
 import com.example.abhijournalwebapp.journalWebApplication.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +23,13 @@ import java.util.stream.Collectors;
 //It will add a mapping on the class and not method.
 //Now to access any endpoint urls within this controller, complete url will look like:
 // localhost:8080/journal/api_endpoint_name
+
 @RestController
 @RequestMapping("/api/journal")
+
+//We can give names to controller using @Tag annotation;
+@Tag(name="Journal Entry APIs", description = "Read Update And Delete Journal Entries Of Specific User")
+
 public class JournalEntryController {
     //Note: Make Sure All Methods Inside A Controller are public so that it can be accessed by all users!
 
@@ -37,7 +44,11 @@ public class JournalEntryController {
     //GET API Endpoint to GET All Journal Entries:
     //ResponseEntity<Type>() is used to enable developers send Http Status Codes along with response body.
     @GetMapping
+
+    //Providing a summary of API Endpoint Using @Operation Annotation:
+    @Operation(summary = "Get All Journal Entries Of A User")
     public ResponseEntity<?> getAllJournalEntriesOfUser(){// localhost:8080/journal GET
+
         //Fetching Username from SecurityContextHolder instead of passing it through path variable:
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -59,6 +70,7 @@ public class JournalEntryController {
     //-> It takes data from request and turns it into a java object so that it can be used in code easily
     //-> The request body will be of type "JournalEntry" Class
     @PostMapping
+    @Operation(summary = "Create A New Journal Entry")
     public ResponseEntity<JournalEntry> createNewEntry(@RequestBody JournalEntry myEntry){//localhost:8080/journal POST
 
         try{
@@ -79,8 +91,11 @@ public class JournalEntryController {
     //GET API Request to Fetch Specific Journal Entity Using A Unique Id and Path Variable:
     //if url is localhost:8080/jornal/id/2 then 2 is our path variable:
     //We can use @PathVariable Annotation to Access Path Variable within function (dtype Long as in hashmap):
-    @GetMapping("/id/{journalId}")
-    public ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable ObjectId journalId){
+    @GetMapping("/id/{jId}")
+    @Operation(summary = "Get A Single Journal Entry By Id")
+    public ResponseEntity<JournalEntry> getJournalEntryById(@PathVariable String jId){
+        //Taking Ids In String And Parsing It To ObjectId For Ease Of Operations
+        ObjectId journalId = new ObjectId(jId);
         //Fetching Username from SecurityContextHolder instead of passing it through path variable:
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
@@ -105,8 +120,11 @@ public class JournalEntryController {
     }
 
     //DELETE API Request To Delete a Specific Journal Entity Using A Unique Id and Path Variable:
-    @DeleteMapping("/id/{journalId}")
-    public ResponseEntity<?> deleteJournalEntityById(@PathVariable ObjectId journalId){
+    @DeleteMapping("/id/{jId}")
+    @Operation(summary = "Delete A Journal Entry By Id")
+    public ResponseEntity<?> deleteJournalEntityById(@PathVariable String jId){
+        //Taking Ids In String And Parsing It To ObjectId For Ease Of Operations
+        ObjectId journalId = new ObjectId(jId);
         //Using the deleteEntryById(Id) method defined in journalEntryService Class:
         //Pass userName in the function so that we can also delete the reference of journal entry from
         // user's journal entry collections:
@@ -127,11 +145,14 @@ public class JournalEntryController {
     }
 
     //PUT API Request To Update a Specific Journal Entity Using A Unique Id and Path Variable:
-    @PutMapping("/id/{journalId}")
+    @PutMapping("/id/{jId}")
+    @Operation(summary = "Update A Journal Entry By Id")
     public ResponseEntity<JournalEntry> updateJournalEntityById(
-            @PathVariable ObjectId journalId ,
+            @PathVariable String jId ,
             @RequestBody JournalEntry updatedRequestEntry
     ){
+        //Taking Ids In String And Parsing It To ObjectId For Ease Of Operations
+        ObjectId journalId = new ObjectId(jId);
         //Fetching Username from SecurityContextHolder instead of passing it through path variable:
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();

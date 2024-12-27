@@ -51,7 +51,7 @@ public class SpringSecurityDev {
                 // Authorizing requests based on their paths.
                 .authorizeHttpRequests(request -> request
                         // Allow anyone to access URLs starting with /public/** without logging in.
-                        .requestMatchers("/api/public/**","/api/").permitAll()
+                        .requestMatchers("/v3/api-docs/**","/swagger-ui/**","/api/public/**","/api/").permitAll()
                         // Require users to log in for URLs starting with /journal/** or /user/**.
                         .requestMatchers("/api/journal/**", "/api/user/**").authenticated()
                         // Restrict URLs starting with /admin/** to users with the "ADMIN" role only.

@@ -5,6 +5,8 @@ package com.example.abhijournalwebapp.journalWebApplication.controller;
 import com.example.abhijournalwebapp.journalWebApplication.cache.AppCache;
 import com.example.abhijournalwebapp.journalWebApplication.entity.User;
 import com.example.abhijournalwebapp.journalWebApplication.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
+
+//We can give names to controller using @Tag annotation;
+@Tag(name="Admin APIs", description = "APIs For Admin Specific Jobs or Tasks")
 public class AdminController {
 
     @Autowired
@@ -23,6 +28,7 @@ public class AdminController {
     private AppCache appCache;
 
     @GetMapping("/all-users")
+    @Operation(summary = "Get All Users Details")
     public ResponseEntity<?> getAllUsers() {
         List<User> allUsers = userService.getAllUsers();
         if (allUsers != null && !allUsers.isEmpty()) {
@@ -33,6 +39,7 @@ public class AdminController {
     }
 
     @PostMapping("/create-new-admin")
+    @Operation(summary = "Create A New Admin Entity")
     public ResponseEntity<?> createNewAdmin(@RequestBody User adminUser){
         try{
             userService.saveNewAdmin(adminUser);

@@ -7,6 +7,8 @@ import com.example.abhijournalwebapp.journalWebApplication.repository.UserReposi
 import com.example.abhijournalwebapp.journalWebApplication.service.QuotesService;
 import com.example.abhijournalwebapp.journalWebApplication.service.UserService;
 import com.example.abhijournalwebapp.journalWebApplication.service.WeatherService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.*;
 // localhost:8080/journal/api_endpoint_name
 @RestController
 @RequestMapping("/api/user")
+//We can give names to controller using @Tag annotation;
+@Tag(name="User APIs" , description = "Read Update And Delete User")
 public class UserController {
 
     @Autowired
@@ -38,8 +42,12 @@ public class UserController {
     @Autowired
     private QuotesService quotesService;
 
-    @GetMapping("/id/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable ObjectId userId){
+    //Providing a summary of API Endpoint Using @Operation Annotation:
+    @Operation(summary = "Get A Single User's Detail By Id")
+    @GetMapping("/id/{uId}")
+    public ResponseEntity<User> getUserById(@PathVariable String uId){
+        //Taking Ids In String And Parsing It To ObjectId For Ease Of Operations
+        ObjectId userId = new ObjectId(uId);
         User user = userService.getUserById(userId);
 
         if(user != null){
@@ -51,6 +59,7 @@ public class UserController {
 
 
     @PutMapping
+    @Operation(summary = "Update A Single User's Detail By Id")
     public ResponseEntity<User> updateUserCredentials(@RequestBody User newUserCred){
 
         //We're going to fetch the user credentials(Username) Using security context holder:
@@ -70,6 +79,7 @@ public class UserController {
     }
 
     @DeleteMapping
+    @Operation(summary = "Delete A Single User's Detail By Id")
     public ResponseEntity<?> deleteUserById(){
         try{
             //We're going to fetch the user credentials(Username) Using security context holder:
@@ -84,6 +94,7 @@ public class UserController {
     }
 
     @GetMapping("/greet-user")
+    @Operation(summary = "Greet A User With A Quote And Weather Detail")
     public ResponseEntity<?> greeting(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userName = authentication.getName();
