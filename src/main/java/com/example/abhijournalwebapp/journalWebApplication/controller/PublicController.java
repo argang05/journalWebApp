@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/public")
 @Slf4j
-
+//CrossOrigin Annotation Allows To Prevent Cors Error While Making Request From Frontend To Backend Due to Port Difference
+@CrossOrigin
 //We can give names to controller using @Tag annotation;
 @Tag(name="Public APIs", description = "Contains All Unprotected API Endpoints Which Don't Require Authentication")
 public class PublicController {

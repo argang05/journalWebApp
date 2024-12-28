@@ -26,7 +26,8 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/journal")
-
+//CrossOrigin Annotation Allows To Prevent Cors Error While Making Request From Frontend To Backend Due to Port Difference
+@CrossOrigin
 //We can give names to controller using @Tag annotation;
 @Tag(name="Journal Entry APIs", description = "Read Update And Delete Journal Entries Of Specific User")
 

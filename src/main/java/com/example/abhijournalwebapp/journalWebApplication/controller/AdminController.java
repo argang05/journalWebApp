@@ -16,7 +16,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
-
+//CrossOrigin Annotation Allows To Prevent Cors Error While Making Request From Frontend To Backend Due to Port Difference
+@CrossOrigin
 //We can give names to controller using @Tag annotation;
 @Tag(name="Admin APIs", description = "APIs For Admin Specific Jobs or Tasks")
 public class AdminController {

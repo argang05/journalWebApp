@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.*;
 //It will add a mapping on the class and not method.
 //Now to access any endpoint urls within this controller, complete url will look like:
 // localhost:8080/journal/api_endpoint_name
+//CrossOrigin Annotation Allows To Prevent Cors Error While Making Request From Frontend To Backend Due to Port Difference
+@CrossOrigin
 @RestController
 @RequestMapping("/api/user")
 //We can give names to controller using @Tag annotation;
