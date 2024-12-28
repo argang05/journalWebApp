@@ -1,0 +1,9 @@
+# We have done profiling for running app in DEVELOPMENT Mode and PRODUCTION Mode
+# The Content Of The Config Files will be slightly different depending upon the packages and
+#feature we're using for different modes
+
+#In this file we'll declare that which profile is active dev or prod:
+
+spring:
+  profiles:
+    active: dev
